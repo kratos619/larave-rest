@@ -13,7 +13,7 @@ class MeetingController extends Controller
      */
     public function index()
     {
-        //
+        return "in works!";
     }
 
     /**
@@ -24,6 +24,7 @@ class MeetingController extends Controller
     public function create()
     {
         //
+        return "in works!";
     }
 
     /**
@@ -35,6 +36,7 @@ class MeetingController extends Controller
     public function store(Request $request)
     {
         //
+        return "in works!";
     }
 
     /**
