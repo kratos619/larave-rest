@@ -28,12 +28,12 @@ Route::resource('meeting/registration', 'RegistrationController',[
 ]);
 
 
-Route::post('user', [
+Route::post('users', [
     'uses' => 'AuthController@store' 
 ]);
 
 
 Route::post('user/signin', [
-    'uses' => 'AuthController@signin' 
+    'uses' => 'AuthController@sign_in' 
 ]);
 

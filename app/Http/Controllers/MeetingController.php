@@ -34,7 +34,7 @@ class MeetingController extends Controller
             ];
 
             return response()->json($response,200);
-        return "in works!";
+       
 
     }
 
@@ -64,7 +64,23 @@ class MeetingController extends Controller
         $user_id = $request->input('user_id');
         //$title = $request->input('title');
         
-        return "in works!";
+        $meeting = [
+            'title' => $title,
+            'description' => $description,
+            'time' => $time,
+            'user_id' => $user_id,
+            'view_meeting' => [
+                'href' => 'api/meeting/1',
+                'method' => 'GET'
+            ]
+            ];
+
+            $response = [
+                'msg' => 'Meeting Created',
+                'meeting' => $meeting
+            ];
+
+            return response()->json($response,201);
 
     }
 
