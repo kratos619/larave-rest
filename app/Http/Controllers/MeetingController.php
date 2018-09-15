@@ -13,7 +13,29 @@ class MeetingController extends Controller
      */
     public function index()
     {
+
+        $meeting = [
+            'title' => 'Title',
+            'description' => 'Description',
+            'time' => 'Time',
+            'user_id' => 'User_id',
+            'view_meeting' => [
+                'href' => 'api/meeting/1',
+                'method' => 'GET'
+            ]
+            ];
+
+            $response = [
+                'msg' => 'List Of all Meeting',
+                'meetings' => [
+                    $meeting,
+                    $meeting
+                ]
+            ];
+
+            return response()->json($response,200);
         return "in works!";
+
     }
 
     /**
@@ -41,6 +63,7 @@ class MeetingController extends Controller
         $time = $request->input('time');
         $user_id = $request->input('user_id');
         //$title = $request->input('title');
+        
         return "in works!";
 
     }
@@ -81,6 +104,25 @@ class MeetingController extends Controller
         $description = $request->input('description');
         $time = $request->input('time');
         $user_id = $request->input('user_id');
+
+        // creating response objects 
+        $meeting = [
+            'title' => $title,
+            'description' => $description,
+            'time' => $time,
+            'user_id' => $user_id,
+            'view_meeting' => [
+                'href' => 'api/meeting/1',
+                'method' => 'GET'
+            ]
+            ];
+
+            $response = [
+                'msg' => 'Meeting Created',
+                'meeting' => $meeting
+            ];
+
+            return response()->json($response,201);
     }
 
     /**
@@ -92,5 +134,15 @@ class MeetingController extends Controller
     public function destroy($id)
     {
         //
+        $response = [
+            'msg' => 'Meeting Deleted',
+            'create' => [
+                'href' => 'api/meeting',
+                'method' => 'POST',
+                'params' => 'title,description,time'
+            ]
+            ];
+
+            return response()->json($response,200);
     }
 }
