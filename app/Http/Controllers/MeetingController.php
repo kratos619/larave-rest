@@ -13,7 +13,6 @@ class MeetingController extends Controller
      */
     public function index()
     {
-
         $meeting = [
             'title' => 'Title',
             'description' => 'Description',
@@ -24,7 +23,6 @@ class MeetingController extends Controller
                 'method' => 'GET'
             ]
             ];
-
             $response = [
                 'msg' => 'List Of all Meeting',
                 'meetings' => [
@@ -32,10 +30,7 @@ class MeetingController extends Controller
                     $meeting
                 ]
             ];
-
             return response()->json($response,200);
-       
-
     }
 
     /**
@@ -57,7 +52,13 @@ class MeetingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //add validations
+        $this->validate($request,[
+            'title' => 'required',
+            'description' => 'required',
+            'time' => 'required|date_format:YmdHie',
+            'user_id' => 'required'
+        ]);
         $title = $request->input('title');
         $description = $request->input('description');
         $time = $request->input('time');
@@ -79,7 +80,6 @@ class MeetingController extends Controller
                 'msg' => 'Meeting Created',
                 'meeting' => $meeting
             ];
-
             return response()->json($response,201);
 
     }
@@ -116,7 +116,13 @@ class MeetingController extends Controller
     public function update(Request $request, $id)
     {
         //
-                $title = $request->input('title');
+        $this->validate($request,[
+            'title' => 'required',
+            'description' => 'required',
+            'time' => 'required|date_format:YmdHie',
+            'user_id' => 'required'
+        ]);
+        $title = $request->input('title');
         $description = $request->input('description');
         $time = $request->input('time');
         $user_id = $request->input('user_id');

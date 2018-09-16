@@ -6,25 +6,6 @@ use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -34,7 +15,12 @@ class RegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validate
+        $this->validate($request,[
+            'meeting_id' => 'required',
+            'user_id' => 'required'
+        ]);
+        
         $meeting_id = $request->input('meeting_id');
         $user_id = $request->input('user_id');
         $meeting = [
