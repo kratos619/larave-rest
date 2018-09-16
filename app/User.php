@@ -10,6 +10,11 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+//add reletionships between user and meetings
+
+public function meetings(){
+    return $this->belongsToMany('App\Meeting');
+}
     /**
      * The attributes that are mass assignable.
      *
