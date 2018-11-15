@@ -4,123 +4,82 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Requests;
+
+use App\Meeting;
+use App\User;
+
 class RegistrationController extends Controller
 {
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //validate
-        $this->validate($request,[
+        $this->validate($request, [
             'meeting_id' => 'required',
-            'user_id' => 'required'
+            'user_id' => 'required',
         ]);
-        
+
         $meeting_id = $request->input('meeting_id');
         $user_id = $request->input('user_id');
-        $meeting = [
-            'title' => 'Title',
-            'description' => 'Description',
-            'time' => 'Time',
-            'view_meeting' => [
-                'href' => 'api/meeting/1',
-                'method' => 'GET'
+
+        $meeting = Meeting::findOrFail($meeting_id);
+        $user = User::findOrFail($user_id);
+
+        $message = [
+            'msg' => 'User is already registered for meeting',
+            'user' => $user,
+            'meeting' => $meeting,
+            'unregister' => [
+                'href' => 'api/v1/meeting/registration/' . $meeting->id,
+                'method' => 'DELETE',
             ]
-            ];
+        ];
+        if ($meeting->users()->where('users.id', $user->id)->first()) {
+            return response()->json($message, 404);
+        };
 
-            $user = [
-                'name' =>  'Name'
-            ];
+        $user->meetings()->attach($meeting);
 
-            $response = [
-                'msg' => 'User register for Meeting',
-                'meeting' => $meeting,
-                'user' => $user,
-                'unregister' => [
-                    'href' => 'api/meeting/registration/1',
-                    'method' => 'DELETE'
-                ]
-                ];
+        $response = [
+            'msg' => 'User registered for meeting',
+            'meeting' => $meeting,
+            'user' => $user,
+            'unregister' => [
+                'href' => 'api/v1/meeting/registration/' . $meeting->id,
+                'method' => 'DELETE'
+            ]
+        ];
 
-                return response()->json($response, 200);
-        
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        return response()->json($response, 201);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
-
-        $meeting = [
-            'title' => 'Title',
-            'description' => 'Description',
-            'time' => 'Time',
-            'view_meeting' => [
-                'href' => 'api/meeting/1',
-                'method' => 'GET' 
-            ],
-
-        ];
-
-        $user = [
-            'name ' => 'Name'
-        ];
+        $meeting = Meeting::findOrFail($id);
+        $meeting->users()->detach();
 
         $response = [
-            'msg' => 'User unregister for meeting',
+            'msg' => 'User unregistered for meeting',
             'meeting' => $meeting,
-            'user' => $user,
+            'user' => 'tbd',
             'register' => [
-                'href' => 'api/meeting/registration',
+                'href' => 'api/v1/meeting/registration',
                 'method' => 'POST',
-                'params' => 'user_id,meeting_id'
+                'params' => 'user_id, meeting_id'
             ]
-            ];
+        ];
 
-            return response()->json($response , 200);
+        return response()->json($response, 200);
     }
 }
